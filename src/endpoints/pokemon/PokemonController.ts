@@ -94,6 +94,35 @@ export class PokemonController {
 
   /**
    * @swagger
+   * /pokemon/count:
+   *   get:
+   *     summary: Retorna a contagem total de Pokémon
+   *     tags: [Pokemon]
+   *     consumes:
+   *       - application/json
+   *     produces:
+   *       - application/json
+   *     responses:
+   *       '200':
+   *          description: Contagem de Pokémon retornada com sucesso
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  total:
+   *                    type: number
+   *       '500':
+   *          description: Erro interno do servidor
+   */
+  async count(req: Request, res: Response) {
+    const total = await new PokemonRepository().count();
+
+    return res.status(200).send({ total });
+  }
+
+  /**
+   * @swagger
    * /pokemon/{name}:
    *   get:
    *     summary: Retorna um Pokémon específico pelo nome
