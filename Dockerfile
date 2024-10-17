@@ -15,4 +15,4 @@ RUN chown -R node /app/node_modules
 
 USER node
 
-EXPOSE 8080
+# EXPOSE 8080

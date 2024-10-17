@@ -1,8 +1,16 @@
 import { Router } from 'express';
-import { HomeController } from './controller/HomeController';
+import { HomeController } from './endpoints/home/HomeController';
+import { PokemonController } from './endpoints/pokemon/PokemonController';
 
 const router = Router();
 
-router.get('/', new HomeController().hello);
+// Home
+router.get('/', new HomeController().healthcheck);
+
+// Pokemon
+router.post('/pokemon', new PokemonController().create);
+router.get('/pokemon/count', new PokemonController().count);
+router.get('/pokemon/:name', new PokemonController().getOne);
+router.delete('/pokemon', new PokemonController().delete);
 
 export default router;

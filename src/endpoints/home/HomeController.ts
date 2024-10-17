@@ -5,7 +5,7 @@ export class HomeController {
    * @swagger
    * /:
    *   get:
-   *     summary: Hello
+   *     summary: healthcheck
    *     tags: [Home]
    *     consumes:
    *       - application/json
@@ -25,7 +25,7 @@ export class HomeController {
    *                     type: object
    *                     description: 'objeto json de retorno'
    */
-  hello(_req: Request, res: Response) {
-    return res.status(200).send('Hello');
+  healthcheck(_req: Request, res: Response) {
+    return res.status(200).send({ data: 'OK' });
   }
 }
