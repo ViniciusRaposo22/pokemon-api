@@ -44,13 +44,13 @@ export class PokemonController {
   async create(req: Request, res: Response): Promise<void> {
     const { name, type } = req.body;
 
-    const result = await new PokemonRepository().insert({
+    const createdPokemon = await new PokemonRepository().insert({
       name,
       type
     });
 
-    if (result) {
-      res.status(201).json({ data: 'Pokémon criado com sucesso!' });
+    if (createdPokemon) {
+      res.status(201).json({ data: createdPokemon });
     } else {
       res.status(500).json({ data: 'Erro ao criar Pokémon.' });
     }
@@ -58,9 +58,9 @@ export class PokemonController {
 
   /**
    * @swagger
-   * /pokemon/count:
+   * /pokemon:
    *   get:
-   *     summary: Retorna a contagem total de Pokémon
+   *     summary: Retorna a lista de Pokémons cadastrados
    *     tags: [Pokemon]
    *     consumes:
    *       - application/json
@@ -68,21 +68,26 @@ export class PokemonController {
    *       - application/json
    *     responses:
    *       '200':
-   *          description: Contagem de Pokémon retornada com sucesso
+   *          description: Lista de Pokémons retornados com sucesso
    *          content:
    *            application/json:
    *              schema:
    *                type: object
    *                properties:
-   *                  count:
-   *                    type: number
+   *                  data:
+   *                    type: object
    *       '500':
    *          description: Erro interno do servidor
    */
-  async count(req: Request, res: Response) {
-    const countPokemon = await new PokemonRepository().count();
+  async list(req: Request, res: Response) {
+    const [items, total] = await new PokemonRepository().findAndCount();
 
-    return res.status(200).send({ count: countPokemon });
+    const pokemons = {
+      items: items,
+      total: total
+    };
+
+    return res.status(200).send({ data: pokemons });
   }
 
   /**
@@ -129,7 +134,7 @@ export class PokemonController {
    * @swagger
    * /pokemon:
    *   delete:
-   *     summary: Remove todos os Pokemóns do software
+   *     summary: Remove todos os Pokemóns cadastrados
    *     tags: [Pokemon]
    *     consumes:
    *       - application/json

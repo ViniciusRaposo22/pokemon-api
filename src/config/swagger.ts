@@ -4,7 +4,7 @@ export const swaggerConfig: swaggerJSDoc.OAS3Options = {
   swaggerDefinition: {
     openapi: '3.0.0',
     info: {
-      title: 'Node API',
+      title: 'Poke API',
       description: 'Documentação da API do projeto Node API.',
       version: '1.0.0'
     },

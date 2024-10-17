@@ -9,7 +9,7 @@ router.get('/', new HomeController().healthcheck);
 
 // Pokemon
 router.post('/pokemon', new PokemonController().create);
-router.get('/pokemon/count', new PokemonController().count);
+router.get('/pokemon', new PokemonController().list);
 router.get('/pokemon/:name', new PokemonController().getOne);
 router.delete('/pokemon', new PokemonController().delete);
 
