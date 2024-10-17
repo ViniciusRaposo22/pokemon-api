@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { PokemonRepository } from './Pokemon.repository';
+import { Pokemon } from './Pokemon.entity';
 
 export class PokemonController {
   /**
@@ -44,13 +45,14 @@ export class PokemonController {
   async create(req: Request, res: Response): Promise<void> {
     const { name, type } = req.body;
 
-    const createdPokemon = await new PokemonRepository().insert({
-      name,
-      type
-    });
+    const pokemon = new Pokemon();
+    pokemon.name = name;
+    pokemon.type = type;
+
+    const createdPokemon = await new PokemonRepository().insert(pokemon);
 
     if (createdPokemon) {
-      res.status(201).json({ data: createdPokemon });
+      res.status(201).json({ data: pokemon });
     } else {
       res.status(500).json({ data: 'Erro ao criar Pokémon.' });
     }
