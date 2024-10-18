@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   node-api:
     container_name: node-api
@@ -19,7 +17,7 @@ services:
       DB_DATABASE: node_api
       DB_CONNECTION_STRING: mysql://nodeapi_root:j5m966qp7jiypfda@node-api-mysql:3306
     networks:
-      - node-connect
+      - node-api-connect
 
   node-api-mysql:
     container_name: node-api-mysql
@@ -34,10 +32,11 @@ services:
     volumes:
       - ~/docker/volumes/NodeApi_MySQL:/var/lib/mysql
     networks:
-      - node-connect
+      - node-api-connect
     logging:
       driver: none
 
 networks:
-  node-connect:
+  node-api-connect:
     driver: bridge
+    name: node-api-connect
