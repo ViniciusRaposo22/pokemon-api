@@ -64,10 +64,24 @@ export class PokemonController {
    *   get:
    *     summary: Retorna a lista de Pokémons cadastrados
    *     tags: [Pokemon]
-   *     consumes:
-   *       - application/json
    *     produces:
    *       - application/json
+   *     parameters:
+   *       - in: query
+   *         name: limit
+   *         required: false
+   *         description: Número máximo de Pokémons por página (até 100)
+   *         schema:
+   *           type: integer
+   *           default: 50
+   *           maximum: 100
+   *       - in: query
+   *         name: page
+   *         required: false
+   *         description: Número da página que deseja retornar
+   *         schema:
+   *           type: integer
+   *           default: 1
    *     responses:
    *       '200':
    *          description: Lista de Pokémons retornados com sucesso
@@ -78,18 +92,40 @@ export class PokemonController {
    *                properties:
    *                  data:
    *                    type: object
+   *                    properties:
+   *                      items:
+   *                        type: array
+   *                        items:
+   *                          type: object
+   *                          properties:
+   *                            name:
+   *                              type: string
+   *                            type:
+   *                              type: string
+   *                      total:
+   *                        type: integer
+   *                      limit:
+   *                        type: integer
+   *                      page:
+   *                        type: integer
    *       '500':
    *          description: Erro interno do servidor
    */
   async list(req: Request, res: Response) {
-    const [items, total] = await new PokemonRepository().findAndCount();
-
+    const limit = Math.min(Number(req.query.limit) || 50, 100);
+    const page = Math.max(Number(req.query.page) || 1, 1);
+    const offset = (page - 1) * limit;
+    const [items, total] = await new PokemonRepository().findAndCount({
+      take: limit,
+      skip: offset
+    });
     const pokemons = {
       items: items,
-      total: total
+      total: total,
+      limit: limit,
+      page: page
     };
-
-    return res.status(200).send({ data: pokemons });
+    return res.status(200).json({ data: pokemons });
   }
 
   /**
